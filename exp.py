@@ -62,10 +62,26 @@ data = digits.images.reshape((n_samples, -1))
 # Create a classifier: a support vector classifier
 clf = svm.SVC(gamma=0.001)
 
-# Split data into 50% train and 50% test subsets
-X_train, X_test, y_train, y_test = train_test_split(
-    data, digits.target, test_size=0.5, shuffle=False
-)
+def split_train_dev_test(X, y, test_size, dev_size):
+    ratio_train = 1-(dev_size+test_size)
+    ratio_val = dev_size
+    ratio_test = test_size
+
+    # Produces test split.
+    x_remaining, x_test, y_remaining, y_test = train_test_split(
+        X, y, test_size=ratio_test)
+
+    # Adjusts val ratio, w.r.t. remaining dataset.
+    ratio_remaining = 1 - ratio_test
+    ratio_val_adjusted = ratio_val / ratio_remaining
+
+    # Produces train and val splits.
+    x_train, x_val, y_train, y_val = train_test_split(
+        x_remaining, y_remaining, test_size=ratio_val_adjusted) 
+    return x_train, x_val,x_test, y_train,y_val,y_test
+
+# Split data into 50% train and 30% test and 20% val subsets
+X_train, X_val,X_test, y_train,y_val,y_test = split_train_dev_test(data, digits.target, test_size=0.3, dev_size=0.2)
 
 # Learn the digits on the train subset
 clf.fit(X_train, y_train)
@@ -73,56 +89,63 @@ clf.fit(X_train, y_train)
 # Predict the value of the digit on the test subset
 predicted = clf.predict(X_test)
 
-###############################################################################
-# Below we visualize the first 4 test samples and show their predicted
-# digit value in the title.
+def predict_and_eval(model, X_test, y_test):
+    # Predict the value of the digit on the test subset
+    predicted = clf.predict(X_test)
 
-_, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
-for ax, image, prediction in zip(axes, X_test, predicted):
-    ax.set_axis_off()
-    image = image.reshape(8, 8)
-    ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
-    ax.set_title(f"Prediction: {prediction}")
+    ###############################################################################
+    # Below we visualize the first 4 test samples and show their predicted
+    # digit value in the title.
 
-###############################################################################
-# :func:`~sklearn.metrics.classification_report` builds a text report showing
-# the main classification metrics.
+    _, axes = plt.subplots(nrows=1, ncols=4, figsize=(10, 3))
+    for ax, image, prediction in zip(axes, X_test, predicted):
+        ax.set_axis_off()
+        image = image.reshape(8, 8)
+        ax.imshow(image, cmap=plt.cm.gray_r, interpolation="nearest")
+        ax.set_title(f"Prediction: {prediction}")
 
-print(
-    f"Classification report for classifier {clf}:\n"
-    f"{metrics.classification_report(y_test, predicted)}\n"
-)
+    ###############################################################################
+    # :func:`~sklearn.metrics.classification_report` builds a text report showing
+    # the main classification metrics.
 
-###############################################################################
-# We can also plot a :ref:`confusion matrix <confusion_matrix>` of the
-# true digit values and the predicted digit values.
+    print(
+        f"Classification report for classifier {clf}:\n"
+        f"{metrics.classification_report(y_test, predicted)}\n"
+    )
 
-disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
-disp.figure_.suptitle("Confusion Matrix")
-print(f"Confusion matrix:\n{disp.confusion_matrix}")
+    ###############################################################################
+    # We can also plot a :ref:`confusion matrix <confusion_matrix>` of the
+    # true digit values and the predicted digit values.
 
-plt.show()
+    disp = metrics.ConfusionMatrixDisplay.from_predictions(y_test, predicted)
+    disp.figure_.suptitle("Confusion Matrix")
+    print(f"Confusion matrix:\n{disp.confusion_matrix}")
 
-###############################################################################
-# If the results from evaluating a classifier are stored in the form of a
-# :ref:`confusion matrix <confusion_matrix>` and not in terms of `y_true` and
-# `y_pred`, one can still build a :func:`~sklearn.metrics.classification_report`
-# as follows:
+    plt.show()
+
+    ###############################################################################
+    # If the results from evaluating a classifier are stored in the form of a
+    # :ref:`confusion matrix <confusion_matrix>` and not in terms of `y_true` and
+    # `y_pred`, one can still build a :func:`~sklearn.metrics.classification_report`
+    # as follows:
 
 
-# The ground truth and predicted lists
-y_true = []
-y_pred = []
-cm = disp.confusion_matrix
+    # The ground truth and predicted lists
+    y_true = []
+    y_pred = []
+    cm = disp.confusion_matrix
 
-# For each cell in the confusion matrix, add the corresponding ground truths
-# and predictions to the lists
-for gt in range(len(cm)):
-    for pred in range(len(cm)):
-        y_true += [gt] * cm[gt][pred]
-        y_pred += [pred] * cm[gt][pred]
+    # For each cell in the confusion matrix, add the corresponding ground truths
+    # and predictions to the lists
+    for gt in range(len(cm)):
+        for pred in range(len(cm)):
+            y_true += [gt] * cm[gt][pred]
+            y_pred += [pred] * cm[gt][pred]
 
-print(
-    "Classification report rebuilt from confusion matrix:\n"
-    f"{metrics.classification_report(y_true, y_pred)}\n"
-)
+    print(
+        "Classification report rebuilt from confusion matrix:\n"
+        f"{metrics.classification_report(y_true, y_pred)}\n"
+    )
+
+    
+predict_and_eval(clf, X_test, y_test)    
