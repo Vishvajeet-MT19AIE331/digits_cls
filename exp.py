@@ -38,6 +38,8 @@ for data_size in data_size_combi:
     train_acc=predict_and_eval_accuracy(best_model, X_train, y_train)
     test_acc=predict_and_eval_accuracy(best_model, X_test, y_test)
     
-    print(f"test_size={np.round(data_size[0],3)} dev_size={np.round(data_size[1],3)} train_size={np.round(1-(data_size[0]+data_size[1]),3)} train_acc={np.round(train_acc,3)} dev_acc={np.round(best_accuracy,3)} test_acc={np.round(test_acc,3)}")
-    print(f"best hyper parameters={best_hparams}") 
-    print("_____________________________________________________________________________________________")
+    #print(f"test_size={np.round(data_size[0],3)} dev_size={np.round(data_size[1],3)} train_size={np.round(1-(data_size[0]+data_size[1]),3)} train_acc={np.round(train_acc,3)} dev_acc={np.round(best_accuracy,3)} test_acc={np.round(test_acc,3)}")
+    #print(f"best hyper parameters={best_hparams}") 
+    #print("_____________________________________________________________________________________________")
+
+print ('Length of dataset:',len(X_train)+len(X_train)+len(X_train))
