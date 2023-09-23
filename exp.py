@@ -43,3 +43,8 @@ for data_size in data_size_combi:
     #print("_____________________________________________________________________________________________")
 
 print ('Length of dataset:',len(X_train)+len(X_train)+len(X_train))
+
+import math
+a= math.sqrt(X_train[0].shape[0])
+
+print ('Size of image:',a,'X',a)
