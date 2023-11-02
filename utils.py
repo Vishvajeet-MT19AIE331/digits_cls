@@ -28,11 +28,12 @@ def tune_hparams(X_train, y_train, X_dev, y_dev, h_params_combinations, model_ty
         if cur_accuracy > best_accuracy:
             best_accuracy = cur_accuracy
             best_hparams = h_params
-            best_model_path = "./models/{}_".format(model_type) +"_".join(["{}:{}".format(k,v) for k,v in h_params.items()]) + ".joblib"
+            best_model_path = "./models/{}_".format(model_type) +"_".join(["{}_{}".format(k,v) for k,v in h_params.items()]) + ".joblib"
             best_model = model
 
     # save the best_model    
-    dump(best_model, best_model_path) 
+    dump(best_model, best_model_path)
+    
 
 
     return best_hparams, best_model_path, best_accuracy 
