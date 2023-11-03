@@ -12,4 +12,5 @@ VOLUME ["/models"]
 # no need for conda or venv
 WORKDIR /digits
 # requirements installation
+#CMD ["/digits/exp.py"]
 RUN /digits/exp.py
