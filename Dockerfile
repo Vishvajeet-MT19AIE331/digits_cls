@@ -5,6 +5,9 @@ COPY . /digits/
 # RUN apt-get update
 # RUN apt-get install -y python3 python3-pip
 RUN pip3 install -r /digits/requirements.txt
+
+# create external storage folder using Volume
+VOLUME ["/models"]
 # need python
 # no need for conda or venv
 WORKDIR /digits
