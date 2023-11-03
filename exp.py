@@ -1,3 +1,33 @@
+# Program for selecting the best performing models and training and saving them ###########
+
+
+# Import datasets, classifiers and performance metrics
+from sklearn import metrics, svm
+
+from utils import preprocess_data, split_data, train_model, read_digits, predict_and_eval, train_test_dev_split, get_hyperparameter_combinations, tune_hparams
+from joblib import dump, load
+import pandas as pd
+
+num_runs  = 1
+# 1. Get the dataset
+X, y = read_digits()
+
+# 2. Hyperparameter combinations
+classifier_param_dict = {}
+# 2.1. SVM
+gamma_list = [0.0001, 0.0005, 0.001, 0.01, 0.1, 1]
+C_list = [0.1, 1, 10, 100, 1000]
+h_params={}
+h_params['gamma'] = gamma_list
+h_params['C'] = C_list
+h_params_combinations = get_hyperparameter_combinations(h_params)
+classifier_param_dict['svm'] = h_params_combinations
+print('__________________________________________________________________________________________________________________')
+print('TRAINING LOGS:')
+print('The combination of tested parameters for SVM are:')
+print(h_params_combinations)
+
+# 2.2 Decision Tree
 max_depth_list = [5, 10, 15, 20, 50, 100]
 h_params_tree = {}
 h_params_tree['max_depth'] = max_depth_list
