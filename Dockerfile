@@ -1,8 +1,12 @@
-FROM ubuntu:18.04
-#COPY ./digits_cls/
-COPY requirements.txt /digits_cls/requirements.txt
-RUN apt-get update && apt-get install -y python3 python3-pip
-RUN pip3 install --no-cache-dir -r /digits_cls/requirements.txt
-#RUN mkdir /digits_cls/models
-#WORKDIR /exp
-CMD ["python3", "./digits_cls/exp.py"]
+# FROM ubuntu:23.10
+FROM python:3.9.17
+# copy the whole code directory
+COPY . /digits/
+# RUN apt-get update
+# RUN apt-get install -y python3 python3-pip
+RUN pip3 install -r /digits/requirements.txt
+# need python
+# no need for conda or venv
+WORKDIR /digits
+# requirements installation
+CMD ["exp"]
