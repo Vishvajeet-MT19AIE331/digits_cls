@@ -9,4 +9,4 @@ RUN pip3 install -r /digits/requirements.txt
 # no need for conda or venv
 WORKDIR /digits
 # requirements installation
-CMD [“python”, “exp.py”]
+RUN /digits/exp.py
