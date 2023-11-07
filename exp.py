@@ -90,5 +90,3 @@ for cur_run_i in range(num_runs):
 #print(metrics.confusion_matrix(binary_preds['svm'], binary_preds['tree'], labels=[True, False] , normalize='pred'))
         
 # print(pd.DataFrame(results).groupby('model_type').describe().T)
-print('__________________________________________________________________________________________________________________')
-          
