@@ -1,5 +1,5 @@
 # FROM ubuntu:23.10
-FROM python:3.9.17
+FROM python:3.9-slim
 # copy the whole code directory
 COPY . /digits/
 # RUN apt-get update
@@ -7,10 +7,9 @@ COPY . /digits/
 RUN pip3 install -r /digits/requirements.txt
 
 # create external storage folder using Volume
-VOLUME ["/models"]
+#VOLUME ["/models"]
 # need python
 # no need for conda or venv
 WORKDIR /digits
 # requirements installation
-#CMD ["/digits/exp.py"]
-RUN /digits/exp.py
+CMD ["exp.py"]
