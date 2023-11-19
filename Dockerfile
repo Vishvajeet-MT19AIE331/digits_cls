@@ -8,8 +8,8 @@ RUN pip3 install -r /digits/requirements.txt
 
 # create external storage folder using Volume
 #VOLUME ["/models"]
-# need python
-# no need for conda or venv
+
 WORKDIR /digits
-# requirements installation
-CMD ["exp.py"]
+
+ENV FLASK_APP=flask_azure.py
+CMD ["flask", "run"]
