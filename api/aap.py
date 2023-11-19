@@ -2,7 +2,7 @@ from flask import Flask, request
 from joblib import load
 
 app = Flask(__name__)
-
+# load the model for making predictions
 model= load('/mnt/c/Users/vishv/OneDrive/Documents/GitHub/digits_cls/models/svm_gamma_0.001_C_1.joblib')
 
 @app.route("/predictor/<image>")
