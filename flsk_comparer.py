@@ -1,6 +1,9 @@
 from flask import Flask, request
 
 app = Flask(__name__)
+
+# load from volume
+model= load('/mnt/c/Users/vishv/OneDrive/Documents/GitHub/digits_cls/models/svm_gamma_0.001_C_1.joblib')
 # take user input as two hand written digit images
 @app.route("/image_compar/<image1>/<image2>", methods=['POST'])
 def image_comparer(image1,image2):
