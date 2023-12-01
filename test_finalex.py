@@ -99,8 +99,8 @@ for cur_run_i in range(num_runs):
 
 
 import pytest
-shuffle_arg = True
-random_state = None
+shuffle_arg = False
+random_state = 1
 test_size =  .2
 dev_size  =  .2
 # Run 1
