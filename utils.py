@@ -52,10 +52,12 @@ def preprocess_data(data):
     data = data.reshape((n_samples, -1))
     return data
 
+
+
 # Split data into 50% train and 50% test subsets
-def split_data(x, y, test_size, random_state=1):
+def split_data(x, y, test_size, random_state, shuffle_arg):
     X_train, X_test, y_train, y_test = train_test_split(
-    x, y, test_size=test_size, shuffle = shuffle_arg
+    x, y, test_size=test_size, random_state=random_state, shuffle = shuffle_arg
     )
     return X_train, X_test, y_train, y_test
 
@@ -73,11 +75,11 @@ def train_model(x, y, model_params, model_type="svm"):
     return model
 
 
-def train_test_dev_split(X, y, test_size, dev_size):
-    X_train_dev, X_test, Y_train_Dev, y_test =  split_data(X, y, test_size=test_size, random_state=1)
+def train_test_dev_split(X, y, test_size, dev_size,random_state,shuffle_arg):
+    X_train_dev, X_test, Y_train_Dev, y_test =  split_data(X, y, test_size=test_size, random_state=random_state,shuffle_arg=shuffle_arg)
     #print("train+dev = {} test = {}".format(len(Y_train_Dev),len(y_test)))
     
-    X_train, X_dev, y_train, y_dev = split_data(X_train_dev, Y_train_Dev, dev_size/(1-test_size), random_state=random_state)
+    X_train, X_dev, y_train, y_dev = split_data(X_train_dev, Y_train_Dev, dev_size/(1-test_size), random_state=random_state,shuffle_arg=shuffle_arg)
         
     return X_train, X_test, X_dev, y_train, y_test, y_dev
 

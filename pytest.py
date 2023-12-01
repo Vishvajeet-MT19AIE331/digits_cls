@@ -1,7 +1,7 @@
 # Import datasets, classifiers and performance metrics
 from sklearn import metrics, svm
 
-#from utils import preprocess_data, split_data, train_model, read_digits, predict_and_eval, train_test_dev_split, get_hyperparameter_combinations, tune_hparams
+from utils import preprocess_data, split_data, train_model, read_digits, predict_and_eval, train_test_dev_split, get_hyperparameter_combinations, tune_hparams
 from joblib import dump, load
 import pandas as pd
 import pytest

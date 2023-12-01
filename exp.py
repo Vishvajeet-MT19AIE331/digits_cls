@@ -4,10 +4,9 @@
 # Import datasets, classifiers and performance metrics
 from sklearn import metrics, svm
 
-#from utils import preprocess_data, split_data, train_model, read_digits, predict_and_eval, train_test_dev_split, get_hyperparameter_combinations, tune_hparams
+from utils import preprocess_data, split_data, train_model, read_digits, predict_and_eval, train_test_dev_split, get_hyperparameter_combinations, tune_hparams
 from joblib import dump, load
 import pandas as pd
-
 
 num_runs  = 1
 shuffle_arg = True
@@ -50,7 +49,8 @@ for cur_run_i in range(num_runs):
         for dev_size in dev_sizes:
             train_size = 1- test_size - dev_size
             # 3. Data splitting -- to create train and test sets                
-            X_train, X_test, X_dev, y_train, y_test, y_dev = train_test_dev_split(X, y, test_size=test_size, dev_size=dev_size)
+            X_train, X_test, X_dev, y_train, y_test, y_dev = train_test_dev_split(X, y, 
+                                            test_size=test_size, dev_size=dev_size, random_state=random_state, shuffle_arg=shuffle_arg)
             # 4. Data preprocessing
             X_train = preprocess_data(X_train)
             X_test = preprocess_data(X_test)
