@@ -99,6 +99,8 @@ for cur_run_i in range(num_runs):
 
 
 import pytest
+
+# Test for same seed/state
 shuffle_arg = False
 random_state = 1
 test_size =  .2
@@ -111,5 +113,21 @@ X_train2, X_test2, X_dev2, y_train2, y_test2, y_dev2 = train_test_dev_split(X, y
                                             test_size=test_size, dev_size=dev_size, random_state=random_state, shuffle_arg=shuffle_arg)
 
 for i in range(5):
-  def test_comparedata():
+  def test_same_seed_state():
       assert y_train1[i] == y_train2[i]
+
+# Test for different seed/state
+shuffle_arg = True
+random_state = None
+test_size =  .2
+dev_size  =  .2
+# Run 1
+X_train3, X_test3, X_dev3, y_train3, y_test3, y_dev3 = train_test_dev_split(X, y, 
+                                            test_size=test_size, dev_size=dev_size, random_state=random_state, shuffle_arg=shuffle_arg)
+# Run 2
+X_train4, X_test4, X_dev4, y_train4, y_test4, y_dev4 = train_test_dev_split(X, y, 
+                                            test_size=test_size, dev_size=dev_size, random_state=random_state, shuffle_arg=shuffle_arg)
+
+for i in range(5):
+  def test_different_seed_state():
+      assert y_train3[i] == y_train4[i]      
