@@ -9,7 +9,7 @@ model= load('/mnt/c/Users/vishv/OneDrive/Documents/GitHub/digits_cls/models/svm_
 def predictor():
     js=request.get_json()
     image=js['image']
-    # convert image to array and make prediction using the model for both images
+    # convert image to array and make prediction using the model 
     classification= model.predict(np.array(image).reshape(1, -1))
        
     return int(classification)    
@@ -18,7 +18,7 @@ def predictor():
 def predict_post():
     js=request.get_json()
     image=js['image']
-    # convert image to array and make prediction using the model for both images
+    # convert image to array and make prediction using the model 
     classification= model.predict(np.array(image).reshape(1, -1))
     
     return {"op" : int(classification) + request.json["suffix"]}

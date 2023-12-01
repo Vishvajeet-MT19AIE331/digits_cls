@@ -17,7 +17,7 @@ args = parser.parse_args()
 
 num_runs  = 1
 shuffle_arg = True
-random_state = 1#args_seed
+random_state = args.random_state
 # 1. Get the dataset
 X, y = read_digits()
 
@@ -48,10 +48,10 @@ classifier_param_dict['tree'] = h_params_trees_combinations
 #print('__________________________________________________________________________________________________________________')
 
 # Choose only one of the models based on argument supplied
-if args.clf_name == 'svm':
-    del classifier_param_dict['tree'] 
-else:
+if args.clf_name == 'tree':
     del classifier_param_dict['svm'] 
+else:
+    del classifier_param_dict['tree'] 
 
 
 results = []
@@ -93,7 +93,7 @@ for cur_run_i in range(num_runs):
                 model_preds[model_type] = predicted_y
                 
                 file_name = "./results/{}_{}".format(model_type,random_state)+".txt"
-                f = open(file_name, 'w')  
+                f = open(file_name, 'a')  
                 print("test accuracy:{:.5f}, test macro-f1: {:.5f}, model saved at".format( test_acc, test_f1),best_model_path, file=f) 
                 f.close()
 
