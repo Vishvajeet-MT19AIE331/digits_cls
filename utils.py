@@ -1,5 +1,5 @@
 from sklearn.model_selection import train_test_split
-from sklearn import svm, tree, datasets, metrics
+from sklearn import svm, tree, datasets, metrics,preprocessing
 from joblib import dump, load
 # we will put all utils here
 
@@ -49,7 +49,8 @@ def read_digits():
 def preprocess_data(data):
     # flatten the images
     n_samples = len(data)
-    data = data.reshape((n_samples, -1))
+    data1 = data.reshape((n_samples, -1))
+    data = preprocessing.normalize(data1, norm='l2')
     return data
 
 

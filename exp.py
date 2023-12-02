@@ -3,7 +3,7 @@
 
 # Import datasets, classifiers and performance metrics
 from sklearn import metrics, svm
-
+from sklearn.linear_model import LogisticRegression
 from utils import preprocess_data, split_data, train_model, read_digits, predict_and_eval, train_test_dev_split, get_hyperparameter_combinations, tune_hparams
 from joblib import dump, load
 import pandas as pd
@@ -40,6 +40,10 @@ classifier_param_dict['tree'] = h_params_trees_combinations
 #print(h_params_trees_combinations)
 #print('__________________________________________________________________________________________________________________')
 
+# 2.3 Logistic regression model
+solver_list = ['lbfgs', 'sag', 'saga' , 'newton-cg','newton-cholesky','liblinear']
+
+'''
 results = []
 test_sizes =  [0.2]
 dev_sizes  =  [0.2]
@@ -95,5 +99,38 @@ for cur_run_i in range(num_runs):
 #print("binarized predictions -- normalized over pred  labels")
 #print(metrics.confusion_matrix(binary_preds['svm'], binary_preds['tree'], labels=[True, False] , normalize='pred'))
         
-# print(pd.DataFrame(results).groupby('model_type').describe().T)
+# print(pd.DataFrame(results).groupby('model_type').describe().T)'''
 
+
+results = []
+test_sizes =  [0.2]
+dev_sizes  =  [0.2]
+for cur_run_i in range(num_runs):
+    
+    for test_size in test_sizes:
+        for dev_size in dev_sizes:
+            train_size = 1- test_size - dev_size
+            # 3. Data splitting -- to create train and test sets                
+            X_train, X_test, X_dev, y_train, y_test, y_dev = train_test_dev_split(X, y, 
+                                            test_size=test_size, dev_size=dev_size, random_state=random_state, shuffle_arg=shuffle_arg)
+            # 4. Data preprocessing
+            X_train = preprocess_data(X_train)
+            X_test = preprocess_data(X_test)
+            X_dev = preprocess_data(X_dev)
+            for solver in solver_list:
+                # Create the logistic regression model
+                model = LogisticRegression(solver=solver)
+
+                # Fit the model to the data
+                model.fit(X_train, y_train)
+
+                # Make predictions on the test data
+                y_pred = model.predict(X_test)
+
+                # Evaluate the model's performance
+                accuracy = model.score(X_test, y_test)
+                print (accuracy)
+
+                # save models
+                model_name = "./models/MT19AIE331_lr_{}_".format(solver) + ".joblib"
+                dump(model, model_name)
