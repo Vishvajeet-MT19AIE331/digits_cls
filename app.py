@@ -5,8 +5,8 @@ from joblib import load
 app = Flask(__name__)
 # load the model for making predictions
 #model= load('C:/Users/vishv/OneDrive/Documents/GitHub/digits_cls/models/svm_gamma_0.001_C_1.joblib')
-model= load('/mnt/c/Users/vishv/OneDrive/Documents/GitHub/digits_cls/models/svm_gamma_0.001_C_1.joblib')
-#model= load('./models/svm_gamma_0.001_C_1.joblib')
+#model= load('/mnt/c/Users/vishv/OneDrive/Documents/GitHub/digits_cls/models/svm_gamma_0.001_C_1.joblib')
+model= load('./models/svm_gamma_0.001_C_1.joblib')
 
 @app.route("/", methods=["POST"])
 def predict_post():
