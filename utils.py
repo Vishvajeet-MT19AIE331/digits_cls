@@ -1,5 +1,5 @@
 from sklearn.model_selection import train_test_split
-from sklearn import svm, tree, datasets, metrics
+from sklearn import svm, tree, datasets, metrics,preprocessing
 from joblib import dump, load
 # we will put all utils here
 
@@ -28,7 +28,7 @@ def tune_hparams(X_train, y_train, X_dev, y_dev, h_params_combinations, model_ty
         if cur_accuracy > best_accuracy:
             best_accuracy = cur_accuracy
             best_hparams = h_params
-            best_model_path = "./models/{}_".format(model_type) +"_".join(["{}_{}".format(k,v) for k,v in h_params.items()]) + ".joblib"
+            best_model_path = "./{}_".format(model_type) +"_".join(["{}_{}".format(k,v) for k,v in h_params.items()]) + ".joblib"
             best_model = model
 
     # save the best_model    
@@ -49,13 +49,16 @@ def read_digits():
 def preprocess_data(data):
     # flatten the images
     n_samples = len(data)
-    data = data.reshape((n_samples, -1))
+    data1 = data.reshape((n_samples, -1))
+    data = preprocessing.normalize(data1, norm='l2')
     return data
 
+
+
 # Split data into 50% train and 50% test subsets
-def split_data(x, y, test_size, random_state=1):
+def split_data(x, y, test_size, random_state, shuffle_arg):
     X_train, X_test, y_train, y_test = train_test_split(
-    x, y, test_size=test_size, shuffle = True
+    x, y, test_size=test_size, random_state=random_state, shuffle = shuffle_arg
     )
     return X_train, X_test, y_train, y_test
 
@@ -73,11 +76,11 @@ def train_model(x, y, model_params, model_type="svm"):
     return model
 
 
-def train_test_dev_split(X, y, test_size, dev_size):
-    X_train_dev, X_test, Y_train_Dev, y_test =  split_data(X, y, test_size=test_size, random_state=1)
-    print("train+dev = {} test = {}".format(len(Y_train_Dev),len(y_test)))
+def train_test_dev_split(X, y, test_size, dev_size,random_state,shuffle_arg):
+    X_train_dev, X_test, Y_train_Dev, y_test =  split_data(X, y, test_size=test_size, random_state=random_state,shuffle_arg=shuffle_arg)
+    #print("train+dev = {} test = {}".format(len(Y_train_Dev),len(y_test)))
     
-    X_train, X_dev, y_train, y_dev = split_data(X_train_dev, Y_train_Dev, dev_size/(1-test_size), random_state=1)
+    X_train, X_dev, y_train, y_dev = split_data(X_train_dev, Y_train_Dev, dev_size/(1-test_size), random_state=random_state,shuffle_arg=shuffle_arg)
         
     return X_train, X_test, X_dev, y_train, y_test, y_dev
 
