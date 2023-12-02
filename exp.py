@@ -134,3 +134,21 @@ for cur_run_i in range(num_runs):
                 # save models
                 model_name = "./models/MT19AIE331_lr_{}_".format(solver) + ".joblib"
                 dump(model, model_name)
+
+# add test
+import pytest
+import numpy as np
+
+# load one of the models
+model= load('/mnt/c/Users/vishv/OneDrive/Documents/GitHub/digits_cls/models/MT19AIE331_lr_lbfgs_.joblib')
+model_parm=model.get_params('solver')
+solver_type=model_parm['solver'] # get the type of solver
+
+# test solver from 'list of solvers' is same as given by get_params
+def test_same_lr_model():
+    assert solver_list[0] == solver_type
+
+# if solver any one from the 'list of solvers' then model is Linear regression
+def test_if_lr():
+    res = np.any([solver_type in i for i in solver_list])   # check if string is present in list
+    assert res == True
